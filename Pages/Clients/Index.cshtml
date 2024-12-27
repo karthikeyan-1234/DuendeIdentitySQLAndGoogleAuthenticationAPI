@@ -1,0 +1,28 @@
+﻿@page
+@model ids.Pages.Clients.IndexModel
+
+<h1>Clients</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Client Id</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var client in Model.Clients)
+        {
+            <tr>
+                <td>@client.ClientId</td>
+                <td>
+                    <a asp-page="./Edit" asp-route-ClientId="@client.ClientId" class="btn btn-primary">Edit</a> |
+                    <a asp-page="./Details" asp-route-ClientId="@client.ClientId" class="btn btn-success">Details</a> |
+                    <a asp-page="./Delete" asp-route-ClientId="@client.ClientId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-page="./Create" class="btn btn-primary">Create New</a>
