@@ -129,6 +129,18 @@
                         <input asp-for="Client!.DPoPClockSkew" class="form-control" />
                         <span asp-validation-for="Client!.DPoPClockSkew" class="text-danger"></span>
                     </div>
+
+                    <!--Multi select combobox for RedirectUris-->
+                    <div class="form-group">
+                    <label asp-for="Client!.RedirectUris" class="col-form-label"></label>
+                        <select asp-for="Client!.RedirectUris" class="form-control" multiple>
+                            @foreach (var item in Model.Client.RedirectUris)
+                            {
+                               <option value="@item.Id">@item.RedirectUri</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Client!.RedirectUris" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
 

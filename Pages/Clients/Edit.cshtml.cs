@@ -1,6 +1,7 @@
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Entities;
 
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace ids.Pages.Clients
     public class EditModel : PageModel
     {
         private readonly ConfigurationDbContext _context;
+        //DbContext for IdentityDB
 
         public EditModel(ConfigurationDbContext context)
         {
@@ -26,7 +28,11 @@ namespace ids.Pages.Clients
 
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
-            var client = await _context.Clients.FirstOrDefaultAsync(c => c.ClientId == ClientId)!;
+            var client = await _context.Clients
+    .Include(c => c.RedirectUris) // Include the related RedirectUris collection
+    .FirstOrDefaultAsync(c => c.ClientId == ClientId);
+
+
 
             if (client == null)
                 return RedirectToPage("./Index");
