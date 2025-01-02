@@ -1,12 +1,14 @@
 ﻿@page
 @model ids.Pages.Clients.IndexModel
 
-<h1>Clients</h1>
+<h3>Clients</h3>
 
-<table class="table">
+<table class="table table-success table-striped table-responsive table-hover">
     <thead>
         <tr>
             <th>Client Id</th>
+            <th>Client Name</th>
+            <th>Redirect Uris</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -15,9 +17,22 @@
         {
             <tr>
                 <td>@client.ClientId</td>
+                <td>@client.ClientName</td>
+                <td>
+                    @if(client.RedirectUris != null)
+                    {
+                        @foreach(var redirectUri in client.RedirectUris)
+                        {
+                            <p>@redirectUri.RedirectUri</p>
+                        }
+                    }
+                    else
+                    {
+                        <p>No Redirect Uris</p>
+                    }
+                </td>
                 <td>
                     <a asp-page="./Edit" asp-route-ClientId="@client.ClientId" class="btn btn-primary">Edit</a> |
-                    <a asp-page="./Details" asp-route-ClientId="@client.ClientId" class="btn btn-success">Details</a> |
                     <a asp-page="./Delete" asp-route-ClientId="@client.ClientId" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
@@ -26,3 +41,4 @@
 </table>
 
 <a asp-page="./Create" class="btn btn-primary">Create New</a>
+<a href="/" class="btn btn-info">Back to Menu</a>

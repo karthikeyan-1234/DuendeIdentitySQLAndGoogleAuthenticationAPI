@@ -20,7 +20,7 @@ namespace ids.Pages.Clients
 
         public async Task OnGetAsync()
         {
-            Clients = await _context.Clients.ToListAsync();
+            Clients = await _context.Clients.Include(c => c.RedirectUris).ToListAsync();
         }
 
     }
