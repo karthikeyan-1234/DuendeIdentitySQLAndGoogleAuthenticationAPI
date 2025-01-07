@@ -107,7 +107,7 @@ namespace ids
                     AllowedScopes = {"weatherapi.read", "weatherapi.write"}
                 },
 
-                // interactive client using code flow + pkce
+                // interactive client using code flow + pkce (Configuration moved to IdentityDB)
                 new Client
                 {
                   ClientId = "interactive",
@@ -115,9 +115,9 @@ namespace ids
 
                   AllowedGrantTypes = GrantTypes.Code,
 
-                  RedirectUris = {"https://localhost:5444/signin-oidc"},
-                  FrontChannelLogoutUri = "https://localhost:5444/signout-oidc",
-                  PostLogoutRedirectUris = {"https://localhost:5444/signout-callback-oidc"},
+                  RedirectUris = {"https://localhost:5444/signin-oidc"}, //Refer [IdentityDB].[dbo].[ClientRedirectUris] table against ClientId
+                  FrontChannelLogoutUri = "https://localhost:5444/signout-oidc", //Refer [IdentityDB].[dbo].[Clients]
+                  PostLogoutRedirectUris = {"https://localhost:5444/signout-callback-oidc"}, //Refer [IdentityDB].[dbo].[ClientPostLogoutRedirectUris] table against ClientId
 
                   AllowOfflineAccess = true,
                   AllowedScopes = {"openid", "profile", "weatherapi.read"},
