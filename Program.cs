@@ -14,7 +14,9 @@ using Duende.IdentityServer;
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
-var connectionString = configuration.GetConnectionString("DefaultConnection");
+//var connectionString = configuration.GetConnectionString("DefaultConnection");
+var connectionString = configuration.GetConnectionString("SqliteConnection");
+
 var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
 
 builder.Services.AddRazorPages();
@@ -45,11 +47,13 @@ builder.Services.AddIdentityServer(options =>
 })
     .AddConfigurationStore(options =>
     {
-        options.ConfigureDbContext = b => b.UseSqlServer(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        options.ConfigureDbContext = b => b.UseSqlite(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        //options.ConfigureDbContext = b => b.UseSqlServer(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
     })
     .AddOperationalStore(options =>
     {
-        options.ConfigureDbContext = b => b.UseSqlServer(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        options.ConfigureDbContext = b => b.UseSqlite(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        //options.ConfigureDbContext = b => b.UseSqlServer(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
     })
     //.AddTestUsers(Config.Users); //Get rid of in memory store
     .AddAspNetIdentity<IdentityUser>() //Add this line to use the IdentityUser
@@ -104,7 +108,7 @@ if (args.Contains("/seed"))
 {
     Console.WriteLine("Seeding database...");
     var config = builder.Configuration;
-    var connectionString_ = config.GetConnectionString("DefaultConnection");
+    var connectionString_ = config.GetConnectionString("SqliteConnection");
     SeedData.EnsureSeedData(connectionString_!);
     SeedData.EnsureUsers(app);
     Console.WriteLine("Done seeding database.");
