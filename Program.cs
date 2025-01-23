@@ -25,7 +25,8 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
+    //options.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
+    options.UseSqlite(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
 });
 
 
@@ -109,7 +110,11 @@ if (args.Contains("/seed"))
     Console.WriteLine("Seeding database...");
     var config = builder.Configuration;
     var connectionString_ = config.GetConnectionString("SqliteConnection");
+    //var connectionString_ = @"Data Source=C:\Users\karthikeyann\source\repos\DuendeIdentitySQLAndGoogleAuthenticationAPI\IdentityDB.db";
+    Console.WriteLine($"{connectionString_}");
+    Console.WriteLine("Begin to seed Data...!!");
     SeedData.EnsureSeedData(connectionString_!);
+    Console.WriteLine("Begin to add users...!!");
     SeedData.EnsureUsers(app);
     Console.WriteLine("Done seeding database.");
     return;

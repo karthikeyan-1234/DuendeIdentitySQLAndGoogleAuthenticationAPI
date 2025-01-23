@@ -22,15 +22,18 @@ namespace ids
             var services = new ServiceCollection();
             services.AddOperationalDbContext(options =>
             {
-                options.ConfigureDbContext = db => db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
+                //options.ConfigureDbContext = db => db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
+                options.ConfigureDbContext = db => db.UseSqlite(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
             });
             services.AddConfigurationDbContext(options =>
             {
-                options.ConfigureDbContext = db => db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
+                //options.ConfigureDbContext = db => db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
+                options.ConfigureDbContext = db => db.UseSqlite(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
             });
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
+                //options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
+                options.UseSqlite(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
             });
 
             var serviceProvider = services.BuildServiceProvider();
@@ -42,6 +45,9 @@ namespace ids
                 var context = scope.ServiceProvider.GetService<ConfigurationDbContext>();
                 context!.Database.Migrate();
                 EnsureSeedData(context);
+                //EnsureUsers(scope);
+
+                
             }
 
         }
@@ -109,11 +115,24 @@ namespace ids
         public static void EnsureUsers(WebApplication web) //IServiceScope scope
         {
             var services = new ServiceCollection();
+
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //{
+            //    //options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
+            //    options.UseSqlite("Data Source=IdentityDB.db", sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
+            //});
+
+
             var serviceProvider = services.BuildServiceProvider();
+
+            Console.WriteLine("Service provider created...");
 
             //Get scope from web
             using (var scope = web.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
+                Console.WriteLine("Scope created...");
+                Console.WriteLine("Getting user manager...");
+
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
                 if (userManager == null)
@@ -129,6 +148,8 @@ namespace ids
                     Email = "",
                     EmailConfirmed = true
                 };
+
+                Console.WriteLine("Finding if user Alice exists....");
 
                 if (userManager.FindByNameAsync(alice.UserName).Result == null)
                 {
