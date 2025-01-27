@@ -26,7 +26,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     //options.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
-    options.UseSqlite(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
+    //options.UseSqlite(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
+    options.UseNpgsql(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
 });
 
 
@@ -48,13 +49,15 @@ builder.Services.AddIdentityServer(options =>
 })
     .AddConfigurationStore(options =>
     {
-        options.ConfigureDbContext = b => b.UseSqlite(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        //options.ConfigureDbContext = b => b.UseSqlite(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
         //options.ConfigureDbContext = b => b.UseSqlServer(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        options.ConfigureDbContext = b => b.UseNpgsql(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
     })
     .AddOperationalStore(options =>
     {
-        options.ConfigureDbContext = b => b.UseSqlite(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        //options.ConfigureDbContext = b => b.UseSqlite(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
         //options.ConfigureDbContext = b => b.UseSqlServer(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        options.ConfigureDbContext = b => b.UseNpgsql(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
     })
     //.AddTestUsers(Config.Users); //Get rid of in memory store
     .AddAspNetIdentity<IdentityUser>() //Add this line to use the IdentityUser
