@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 //var connectionString = configuration.GetConnectionString("DefaultConnection");
-var connectionString = configuration.GetConnectionString("SqliteConnection");
+var connectionString = configuration.GetConnectionString("PostGreSQLConnection");
 
 var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
 
@@ -112,7 +112,7 @@ if (args.Contains("/seed"))
 {
     Console.WriteLine("Seeding database...");
     var config = builder.Configuration;
-    var connectionString_ = config.GetConnectionString("SqliteConnection");
+    var connectionString_ = config.GetConnectionString("PostGreSQLConnection");
     //var connectionString_ = @"Data Source=C:\Users\karthikeyann\source\repos\DuendeIdentitySQLAndGoogleAuthenticationAPI\IdentityDB.db";
     Console.WriteLine($"{connectionString_}");
     Console.WriteLine("Begin to seed Data...!!");
