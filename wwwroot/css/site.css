@@ -1,39 +1,147 @@
-﻿.welcome-page .logo {
-  width: 64px;
+﻿@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+    font-family: "Poppins", sans-serif !important;
+}
+
+.welcome-page .logo {
+    width: 64px;
 }
 
 .icon-banner {
-  width: 32px;
+    width: 32px;
 }
 
 .body-container {
-  margin-top: 60px;
-  padding-bottom: 40px;
+    margin-top: 60px;
+    padding-bottom: 40px;
 }
 
 .welcome-page li {
-  list-style: none;
-  padding: 4px;
+    list-style: none;
+    padding: 4px;
 }
 
 .logged-out-page iframe {
-  display: none;
-  width: 0;
-  height: 0;
+    display: none;
+    width: 0;
+    height: 0;
 }
 
 .grants-page .card {
-  margin-top: 20px;
-  border-bottom: 1px solid lightgray;
+    margin-top: 20px;
+    border-bottom: 1px solid lightgray;
 }
-.grants-page .card .card-title {
-  font-size: 120%;
-  font-weight: bold;
+
+    .grants-page .card .card-title {
+        font-size: 120%;
+        font-weight: bold;
+    }
+
+        .grants-page .card .card-title img {
+            width: 100px;
+            height: 100px;
+        }
+
+    .grants-page .card label {
+        font-weight: bold;
+    }
+
+/* New Css */
+body {
+    background-image: url('../assets/login_bg_1.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
-.grants-page .card .card-title img {
-  width: 100px;
-  height: 100px;
+
+.container.body-container.login-bg {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100%;
+    height: 100vh;
 }
-.grants-page .card label {
-  font-weight: bold;
+
+img.login_main_logo {
+    max-width: 200px;
+    margin-bottom: 2rem;
+    margin-top: 3rem;
+    display: block;
+}
+
+img.sub_logo {
+    max-width: 121px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.login-page.col-sm-4 {
+    max-width: 380px;
+    margin: 0 0 0 4.3rem;
+}
+
+.login_form {
+    position: relative;
+}
+
+a.link-text {
+    color: #0056E0;
+    font-size: 13px;
+    float: right;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+img.logo_icon {
+    position: absolute;
+    right: -1rem;
+    top: -3rem;
+    max-width: 40px;
+}
+
+h3.welcome_title {
+    color: #00217F;
+    font-size: 16px !important;
+    font-weight: 500;
+}
+
+p.message_content {
+    color: #333;
+    font-size: 13px;
+    padding: 1rem 0;
+}
+
+label {
+    font-size: 14px;
+    color: #333;
+}
+
+button.btn.btn-primary {
+    display: block;
+    width: 100%;
+    margin-top: 3rem !important;
+}
+
+@media (max-width: 950px) {
+    .login-page.col-sm-4 {
+        max-width: 380px;
+        margin: 0 0 0 2rem !important;
+    }
+}
+
+@media (max-width: 950px) {
+    body {
+        background-repeat: repeat;
+    }
+}
+
+@media (max-width: 574px) {
+    body {
+        background-color: #fff;
+        background-image: none;
+    }
+
+    .login-page.col-sm-4 {
+        max-width: 100%;
+        margin: 0 2rem 0 2rem !important;
+    }
 }

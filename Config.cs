@@ -104,7 +104,8 @@ namespace ids
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = {new Secret("SuperSecretPassword".Sha256())},
 
-                    AllowedScopes = {"weatherapi.read", "weatherapi.write"}
+                    AllowedScopes = {"weatherapi.read", "weatherapi.write"},
+                    AlwaysIncludeUserClaimsInIdToken = true
                 },
 
                 // interactive client using code flow + pkce (Configuration moved to IdentityDB)
@@ -123,7 +124,8 @@ namespace ids
                   AllowedScopes = {"openid", "profile", "weatherapi.read"},
                   RequirePkce = true,
                   //RequireConsent = true, //Commented out to avoid consent screen
-                  AllowPlainTextPkce = false
+                  AllowPlainTextPkce = false,
+                  AlwaysIncludeUserClaimsInIdToken = true
                 },
           };
     }
