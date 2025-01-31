@@ -15,7 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 //var connectionString = configuration.GetConnectionString("DefaultConnection");
-var connectionString = configuration.GetConnectionString("PostGreSQLConnection");
+//var connectionString = configuration.GetConnectionString("PostGreSQLConnection");
+var connectionString = configuration.GetConnectionString("SqliteConnection");
 
 var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
 
@@ -26,8 +27,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     //options.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
-    //options.UseSqlite(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
-    options.UseNpgsql(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
+    options.UseSqlite(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
+    //options.UseNpgsql(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
 });
 
 
@@ -49,15 +50,15 @@ builder.Services.AddIdentityServer(options =>
 })
     .AddConfigurationStore(options =>
     {
-        //options.ConfigureDbContext = b => b.UseSqlite(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        options.ConfigureDbContext = b => b.UseSqlite(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
         //options.ConfigureDbContext = b => b.UseSqlServer(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
-        options.ConfigureDbContext = b => b.UseNpgsql(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        //options.ConfigureDbContext = b => b.UseNpgsql(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
     })
     .AddOperationalStore(options =>
     {
-        //options.ConfigureDbContext = b => b.UseSqlite(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        options.ConfigureDbContext = b => b.UseSqlite(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
         //options.ConfigureDbContext = b => b.UseSqlServer(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
-        options.ConfigureDbContext = b => b.UseNpgsql(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
+        //options.ConfigureDbContext = b => b.UseNpgsql(connectionString, opt => opt.MigrationsAssembly(migrationsAssembly));
     })
     //.AddTestUsers(Config.Users); //Get rid of in memory store
     .AddAspNetIdentity<IdentityUser>() //Add this line to use the IdentityUser
@@ -112,11 +113,9 @@ if (args.Contains("/seed"))
 {
     Console.WriteLine("Seeding database...");
     var config = builder.Configuration;
-    var connectionString_ = config.GetConnectionString("PostGreSQLConnection");
-    //var connectionString_ = @"Data Source=C:\Users\karthikeyann\source\repos\DuendeIdentitySQLAndGoogleAuthenticationAPI\IdentityDB.db";
-    Console.WriteLine($"{connectionString_}");
+    Console.WriteLine($"{connectionString}");
     Console.WriteLine("Begin to seed Data...!!");
-    SeedData.EnsureSeedData(connectionString_!);
+    SeedData.EnsureSeedData(connectionString!);
     Console.WriteLine("Begin to add users...!!");
     SeedData.EnsureUsers(app);
     Console.WriteLine("Done seeding database.");
