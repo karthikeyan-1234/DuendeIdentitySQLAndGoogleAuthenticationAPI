@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer;
+using Duende.IdentityServer.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,11 @@ var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("SqliteConnection");
 
 var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
+
+builder.Services.Configure<IdentityServerOptions>(options =>
+{
+    options.IssuerUri = "https://localhost/IdentityServer"; // Or  for local dev
+});
 
 builder.Services.AddRazorPages();
 
@@ -100,9 +106,32 @@ void CheckSameSite(HttpContext context, CookieOptions cookieOptions)
     }
 }
 
+//Open Cors for everyone
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", p =>
+    {
+        p.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.UseIdentityServer();
+
+
+app.Use(async (ctx, next) =>
+{
+    if (ctx.Request.Headers.TryGetValue("X-Forwarded-Proto", out var proto))
+    {
+        ctx.Request.Scheme = proto.ToString();
+    }
+    await next();
+});
 
 app.UseStaticFiles();
 app.UseRouting();
