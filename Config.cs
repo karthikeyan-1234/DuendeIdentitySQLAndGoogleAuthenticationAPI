@@ -116,9 +116,9 @@ namespace ids
 
                   AllowedGrantTypes = GrantTypes.Code,
 
-                  RedirectUris = {"https://localhost:5444/signin-oidc"}, //Refer [IdentityDB].[dbo].[ClientRedirectUris] table against ClientId
-                  FrontChannelLogoutUri = "https://localhost:5444/signout-oidc", //Refer [IdentityDB].[dbo].[Clients]
-                  PostLogoutRedirectUris = {"https://localhost:5444/signout-callback-oidc"}, //Refer [IdentityDB].[dbo].[ClientPostLogoutRedirectUris] table against ClientId
+                  RedirectUris = {"http://localhost:5444/signin-oidc"}, //Refer [IdentityDB].[dbo].[ClientRedirectUris] table against ClientId
+                  FrontChannelLogoutUri = "http://localhost:5444/signout-oidc", //Refer [IdentityDB].[dbo].[Clients]
+                  PostLogoutRedirectUris = {"http://localhost:5444/signout-callback-oidc"}, //Refer [IdentityDB].[dbo].[ClientPostLogoutRedirectUris] table against ClientId
 
                   AllowOfflineAccess = true,
                   AllowedScopes = {"openid", "profile", "weatherapi.read"},
