@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer;
+using Duende.IdentityServer.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,12 @@ var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("SqliteConnection");
 
 var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
+
+
+builder.Services.Configure<IdentityServerOptions>(options =>
+{
+    options.IssuerUri = "https://localhost/IdentityServer"; // Or  for local dev   "https://localhost:5443"
+});
 
 builder.Services.AddRazorPages();
 
@@ -44,7 +51,7 @@ builder.Services.AddIdentityServer(options =>
     options.Events.RaiseSuccessEvents = true;
 
     options.EmitStaticAudienceClaim = true;
-    //options.ExternalCookies.AuthenticationScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+    
 })
     .AddConfigurationStore(options =>
     {
@@ -74,7 +81,7 @@ builder.Services.AddAuthentication(options =>
 //Cookie policy
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
-    options.MinimumSameSitePolicy = SameSiteMode.Lax; //SameSiteMode.Unspecified;
+    options.MinimumSameSitePolicy = SameSiteMode.None; //SameSiteMode.Unspecified;
     options.Secure = CookieSecurePolicy.None; //CookieSecurePolicy.SameAsRequest;
     options.CheckConsentNeeded = context => true;
     options.OnAppendCookie = cookieContext => 
@@ -88,17 +95,44 @@ void CheckSameSite(HttpContext context, CookieOptions cookieOptions)
     if (context.Request.Headers.ContainsKey("X-Forwarded-Proto") &&
         context.Request.Headers["X-Forwarded-Proto"].FirstOrDefault() == "https")
     {
-        cookieOptions.SameSite = SameSiteMode.Lax;
+        cookieOptions.SameSite = SameSiteMode.None; //SameSiteMode.Lax
     }
     else
     {
-        cookieOptions.SameSite = SameSiteMode.Lax; //SameSiteMode.Strict;
+        cookieOptions.SameSite = SameSiteMode.None; //SameSiteMode.Lax;
     }
 }
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.Domain = "localhost"; // Ensure the same domain is used
+    options.Cookie.Path = "/";
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Ensure HTTPS is used
+    options.Cookie.SameSite = SameSiteMode.None; // Required for cross-origin authentication
+});
+
+//builder.Services.AddIdentityServer(options =>
+//{
+//    options.Authentication.CheckSessionCookieName = "idsrv.session"; // Helps manage session tracking
+//    options.Authentication.RequireAuthenticatedUserForSignOutMessage = true;
+//});
+
+
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.UseIdentityServer();
+
+
+app.Use(async (ctx, next) =>
+{
+    if (ctx.Request.Headers.TryGetValue("X-Forwarded-Proto", out var proto))
+    {
+        ctx.Request.Scheme = proto.ToString();
+    }
+    await next();
+});
 
 app.UseStaticFiles();
 app.UseRouting();
