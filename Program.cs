@@ -23,7 +23,7 @@ var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
 
 builder.Services.Configure<IdentityServerOptions>(options =>
 {
-    options.IssuerUri = "http://localhost:5036"; // Or  Identity server URI   "https://localhost:5443" "https://localhost/IdentityServer"
+    options.IssuerUri = "http://localhost:5036"; // Or  Identity server URI "http://10.152.6.19"   "https://localhost:5443" "https://localhost/IdentityServer"
 });
 
 builder.Services.AddRazorPages();
