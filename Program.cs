@@ -23,7 +23,7 @@ var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
 
 builder.Services.Configure<IdentityServerOptions>(options =>
 {
-    options.IssuerUri = "http://10.152.6.19"; // Or  Identity server URI "http://localhost:5036"   "https://localhost:5443" "https://localhost/IdentityServer"
+    options.IssuerUri = "http://localhost:5036"; // Or  Identity server URI "http://10.152.6.19"   "https://localhost:5443" "https://localhost/IdentityServer"
 });
 
 builder.Services.AddRazorPages();
@@ -107,7 +107,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.Domain = "localhost"; // Ensure the same domain is used
     options.Cookie.Path = "/";
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Ensure HTTPS is used
+    options.Cookie.SecurePolicy = CookieSecurePolicy.None; // Ensure HTTPS is used
     options.Cookie.SameSite = SameSiteMode.None; // Required for cross-origin authentication
 });
 

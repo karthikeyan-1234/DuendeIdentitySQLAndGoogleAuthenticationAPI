@@ -165,8 +165,16 @@ public class Index : PageModel
         }
 
         // something went wrong, show form with error
-        await BuildModelAsync(Input.ReturnUrl);
-        return Page();
+        try
+        {
+            await BuildModelAsync(Input.ReturnUrl);
+            return Page();
+        }
+        catch (Exception e)
+        {
+            ModelState.AddModelError(string.Empty, e.Message);
+            return Page();
+        }
     }
 
     private async Task BuildModelAsync(string? returnUrl)
